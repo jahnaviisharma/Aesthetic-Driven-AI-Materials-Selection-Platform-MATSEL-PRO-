@@ -1,0 +1,11 @@
+MATSEL PRO processes the inputs and dynamically assigns importance to different criteria.
+Application Requirements
+        ↓
+Dynamic Weighting
+        ↓
+Material Database Filtering
+        ↓
+Multi-Criteria Scoring
+        ↓
+Material Ranking
+The system returns suitable material candidates along with an AI-generated engineering explanation.
