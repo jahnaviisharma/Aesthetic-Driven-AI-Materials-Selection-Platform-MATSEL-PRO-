@@ -1,0 +1,1572 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Material-Aesthetic Selection Dashboard | CP302 | IIT Ropar</title>
+    <meta name="description" content="Material and surface finishing selection tool for Integrated Design Project CP302, IIT Ropar – Dept. of Metallurgical & Materials Engineering.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        /* =========================================================
+           DESIGN SYSTEM
+           ========================================================= */
+        :root {
+            --navy-900: #0B1120;
+            --navy-800: #0F1B33;
+            --navy-700: #162240;
+            --navy-600: #1E3A5F;
+            --accent-primary: #2563EB;
+            --accent-light: #3B82F6;
+            --accent-glow: rgba(37, 99, 235, 0.15);
+            --accent-subtle: #DBEAFE;
+            --green-500: #10B981;
+            --green-bg: #D1FAE5;
+            --amber-500: #F59E0B;
+            --amber-bg: #FEF3C7;
+            --red-500: #EF4444;
+            --text-primary: #111827;
+            --text-secondary: #374151;
+            --text-muted: #6B7280;
+            --text-faint: #9CA3AF;
+            --bg-body: #F3F4F6;
+            --bg-card: #FFFFFF;
+            --border: #E5E7EB;
+            --border-light: #F3F4F6;
+            --shadow-sm: 0 1px 2px rgba(0,0,0,0.05);
+            --shadow-md: 0 4px 6px -1px rgba(0,0,0,0.07), 0 2px 4px -2px rgba(0,0,0,0.05);
+            --shadow-lg: 0 10px 15px -3px rgba(0,0,0,0.08), 0 4px 6px -4px rgba(0,0,0,0.05);
+            --shadow-xl: 0 20px 25px -5px rgba(0,0,0,0.08), 0 8px 10px -6px rgba(0,0,0,0.04);
+            --radius-sm: 6px;
+            --radius-md: 10px;
+            --radius-lg: 14px;
+            --sidebar-w: 330px;
+            --header-h: 72px;
+        }
+
+        /* =========================================================
+           RESET & BASE
+           ========================================================= */
+        *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            background: var(--bg-body);
+            color: var(--text-primary);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* =========================================================
+           HEADER
+           ========================================================= */
+        .app-header {
+            position: sticky;
+            top: 0;
+            z-index: 200;
+            height: var(--header-h);
+            background: linear-gradient(135deg, var(--navy-900) 0%, var(--navy-700) 100%);
+            color: #fff;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 2rem;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.25);
+        }
+
+        .app-header::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--accent-primary), var(--accent-light), var(--green-500));
+        }
+
+        .brand { display: flex; flex-direction: column; gap: 2px; }
+        .brand-title {
+            font-size: 1.35rem;
+            font-weight: 800;
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+        }
+        .brand-sub {
+            font-size: 0.78rem;
+            font-weight: 400;
+            opacity: 0.7;
+            letter-spacing: 0.02em;
+        }
+
+        .student-badge {
+            text-align: right;
+            font-size: 0.8rem;
+            line-height: 1.5;
+        }
+        .student-badge strong { font-weight: 600; }
+        .student-badge .roll { opacity: 0.65; font-size: 0.72rem; }
+
+        /* =========================================================
+           LAYOUT SHELL
+           ========================================================= */
+        .shell {
+            display: grid;
+            grid-template-columns: var(--sidebar-w) 1fr;
+            min-height: calc(100vh - var(--header-h));
+        }
+
+        /* =========================================================
+           SIDEBAR
+           ========================================================= */
+        .sidebar {
+            background: var(--bg-card);
+            border-right: 1px solid var(--border);
+            padding: 1.75rem 1.5rem;
+            position: sticky;
+            top: var(--header-h);
+            height: calc(100vh - var(--header-h));
+            overflow-y: auto;
+            scrollbar-width: thin;
+            scrollbar-color: var(--border) transparent;
+        }
+
+        .sidebar::-webkit-scrollbar { width: 5px; }
+        .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 99px; }
+
+        .filter-section { margin-bottom: 1.75rem; }
+
+        .filter-label {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-size: 0.7rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--navy-700);
+            margin-bottom: 0.75rem;
+        }
+
+        .filter-label .icon {
+            width: 16px;
+            height: 16px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background: var(--accent-subtle);
+            color: var(--accent-primary);
+            border-radius: 4px;
+            font-size: 0.6rem;
+            font-weight: 800;
+        }
+
+        /* Dropdown */
+        .select-wrap {
+            position: relative;
+        }
+        .select-wrap::after {
+            content: '▾';
+            position: absolute;
+            right: 12px;
+            top: 50%;
+            transform: translateY(-50%);
+            pointer-events: none;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+        }
+
+        .filter-select {
+            width: 100%;
+            padding: 0.55rem 2rem 0.55rem 0.75rem;
+            border: 1.5px solid var(--border);
+            border-radius: var(--radius-sm);
+            background: var(--bg-card);
+            font-family: inherit;
+            font-size: 0.85rem;
+            color: var(--text-primary);
+            cursor: pointer;
+            appearance: none;
+            transition: border-color 0.2s;
+        }
+        .filter-select:focus {
+            outline: none;
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-glow);
+        }
+
+        /* Chips */
+        .chip-row { display: flex; flex-wrap: wrap; gap: 6px; }
+
+        .filter-chip {
+            padding: 5px 12px;
+            font-size: 0.72rem;
+            font-weight: 500;
+            border-radius: 99px;
+            border: 1.5px solid var(--border);
+            background: var(--bg-body);
+            color: var(--text-secondary);
+            cursor: pointer;
+            user-select: none;
+            transition: all 0.2s ease;
+        }
+        .filter-chip:hover { border-color: var(--accent-light); color: var(--accent-primary); }
+        .filter-chip.on {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: #fff;
+            box-shadow: 0 2px 8px rgba(37,99,235,0.25);
+        }
+
+        /* Toggles */
+        .toggle-list { display: flex; flex-direction: column; gap: 6px; }
+
+        .mat-toggle {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.85rem;
+            cursor: pointer;
+            padding: 4px 0;
+        }
+
+        .mat-toggle input[type="checkbox"] {
+            width: 16px;
+            height: 16px;
+            accent-color: var(--accent-primary);
+            cursor: pointer;
+        }
+
+        .mat-toggle .fam-hint {
+            font-size: 0.7rem;
+            color: var(--text-faint);
+            margin-left: 2px;
+        }
+
+        /* =========================================================
+           MAIN PANEL
+           ========================================================= */
+        .main-panel {
+            padding: 2rem 2.25rem 3rem;
+            min-width: 0;
+        }
+
+        /* Section heading */
+        .sec-head {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin-bottom: 1.25rem;
+        }
+        .sec-head .sec-icon {
+            width: 32px;
+            height: 32px;
+            border-radius: var(--radius-sm);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.9rem;
+            flex-shrink: 0;
+        }
+        .sec-head .sec-icon.blue  { background: var(--accent-subtle); color: var(--accent-primary); }
+        .sec-head .sec-icon.green { background: var(--green-bg); color: var(--green-500); }
+        .sec-head .sec-icon.amber { background: var(--amber-bg); color: var(--amber-500); }
+
+        .sec-head h2 {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--navy-800);
+            white-space: nowrap;
+        }
+        .sec-head .divider {
+            flex: 1;
+            height: 1px;
+            background: var(--border);
+        }
+        .sec-head .count-badge {
+            font-size: 0.7rem;
+            font-weight: 600;
+            background: var(--accent-subtle);
+            color: var(--accent-primary);
+            padding: 2px 10px;
+            border-radius: 99px;
+            white-space: nowrap;
+        }
+
+        /* Stats bar */
+        .stats-bar {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding: 10px 14px;
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            font-size: 0.72rem;
+            color: var(--text-muted);
+        }
+        .stats-bar .sb-label {
+            font-weight: 700;
+            color: var(--navy-800);
+            font-size: 0.73rem;
+            margin-right: 4px;
+        }
+        .stats-bar .sb-pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            padding: 3px 10px;
+            border-radius: 99px;
+            font-weight: 600;
+            font-size: 0.68rem;
+        }
+        .sb-pill.fam-metals     { background: #E0E7FF; color: #3730A3; }
+        .sb-pill.fam-polymers   { background: #FCE7F3; color: #9D174D; }
+        .sb-pill.fam-natural    { background: #D1FAE5; color: #065F46; }
+        .sb-pill.fam-composites { background: #FEF3C7; color: #92400E; }
+        .sb-pill .sb-n {
+            background: rgba(0,0,0,0.1);
+            border-radius: 99px;
+            padding: 0 5px;
+            font-size: 0.62rem;
+        }
+
+        /* =========================================================
+           SECTION C – PERCEPTION CLOUD (shown first)
+           ========================================================= */
+        .perception-bar {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.25rem 1.5rem;
+            margin-bottom: 2.25rem;
+            box-shadow: var(--shadow-sm);
+        }
+
+        .ptag-row {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .ptag {
+            position: relative;
+            padding: 6px 14px;
+            font-size: 0.78rem;
+            font-weight: 600;
+            border-radius: var(--radius-sm);
+            border: 1.5px solid var(--accent-primary);
+            background: linear-gradient(135deg, rgba(37,99,235,0.06) 0%, rgba(37,99,235,0.02) 100%);
+            color: var(--accent-primary);
+            cursor: help;
+            transition: background 0.2s, transform 0.15s;
+        }
+        .ptag:hover {
+            background: var(--accent-primary);
+            color: #fff;
+            transform: translateY(-1px);
+        }
+        .ptag:hover .ptip { visibility: visible; opacity: 1; transform: translateX(-50%) translateY(0); }
+
+        .ptip {
+            visibility: hidden;
+            opacity: 0;
+            position: absolute;
+            bottom: calc(100% + 10px);
+            left: 50%;
+            transform: translateX(-50%) translateY(4px);
+            width: 260px;
+            background: var(--navy-900);
+            color: #fff;
+            font-size: 0.72rem;
+            font-weight: 400;
+            line-height: 1.5;
+            padding: 10px 14px;
+            border-radius: var(--radius-sm);
+            box-shadow: var(--shadow-xl);
+            pointer-events: none;
+            transition: all 0.25s ease;
+            z-index: 50;
+            text-align: left;
+        }
+        .ptip::after {
+            content: '';
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -5px;
+            border-width: 5px;
+            border-style: solid;
+            border-color: var(--navy-900) transparent transparent transparent;
+        }
+
+        /* =========================================================
+           SECTION A – MATERIAL CARDS
+           ========================================================= */
+        .mat-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(420px, 1fr));
+            gap: 1.25rem;
+            margin-bottom: 2.75rem;
+        }
+
+        .mat-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+            box-shadow: var(--shadow-md);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .mat-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-lg);
+        }
+        .mat-card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0;
+            height: 3px;
+            border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+        }
+        .mat-card.rank-1::before { background: linear-gradient(90deg, #FFD700, #FFA500); }
+        .mat-card.rank-2::before { background: linear-gradient(90deg, #C0C0C0, #A0A0A0); }
+        .mat-card.rank-3::before { background: linear-gradient(90deg, #CD7F32, #A0522D); }
+        .mat-card.rank-n::before { background: var(--accent-primary); }
+
+        .mc-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 0.5rem;
+        }
+
+        .mc-rank {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.72rem;
+            font-weight: 800;
+            color: #fff;
+            flex-shrink: 0;
+        }
+        .mc-rank.r1 { background: linear-gradient(135deg, #FFD700, #F59E0B); }
+        .mc-rank.r2 { background: linear-gradient(135deg, #94A3B8, #64748B); }
+        .mc-rank.r3 { background: linear-gradient(135deg, #CD7F32, #92400E); }
+        .mc-rank.rn { background: var(--accent-primary); }
+
+        .mc-name {
+            font-size: 1.08rem;
+            font-weight: 700;
+            color: var(--navy-800);
+            line-height: 1.25;
+        }
+        .mc-grade {
+            font-size: 0.82rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .mc-surface {
+            display: inline-block;
+            font-size: 0.8rem;
+            font-weight: 600;
+            color: var(--accent-primary);
+            background: var(--accent-subtle);
+            padding: 3px 10px;
+            border-radius: 99px;
+            margin-bottom: 0.75rem;
+        }
+
+        .mc-specs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 0;
+            background: var(--bg-body);
+            border: 1px solid var(--border-light);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            margin-bottom: 0.85rem;
+        }
+
+        .mc-spec {
+            padding: 0.65rem 0.85rem;
+        }
+        .mc-spec:first-child { border-right: 1px solid var(--border-light); }
+        .mc-spec-label {
+            font-size: 0.62rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-faint);
+            margin-bottom: 2px;
+        }
+        .mc-spec-val {
+            font-size: 0.92rem;
+            font-weight: 700;
+            color: var(--text-primary);
+        }
+
+        .cite {
+            font-size: 0.6rem;
+            font-weight: 500;
+            background: var(--border);
+            color: var(--text-muted);
+            padding: 1px 5px;
+            border-radius: 3px;
+            margin-left: 3px;
+            vertical-align: middle;
+            letter-spacing: 0;
+            cursor: default;
+        }
+
+        .mc-rationale {
+            font-size: 0.82rem;
+            color: var(--text-secondary);
+            line-height: 1.55;
+            margin-bottom: 0.75rem;
+        }
+
+        .mc-tags { display: flex; flex-wrap: wrap; gap: 4px; margin-bottom: 0.65rem; }
+        .mc-tag {
+            font-size: 0.62rem;
+            font-weight: 600;
+            padding: 3px 8px;
+            border-radius: 99px;
+            background: #EFF6FF;
+            color: #1E40AF;
+            border: 1px solid #BFDBFE;
+        }
+
+        .mc-footer {
+            border-top: 1px solid var(--border-light);
+            padding-top: 0.55rem;
+            font-size: 0.68rem;
+            color: var(--text-faint);
+        }
+
+        /* =========================================================
+           SECTION B – PROCESS TABLE
+           ========================================================= */
+        .proc-section { margin-bottom: 2rem; }
+
+        .proc-grid {
+            display: grid;
+            gap: 0.85rem;
+        }
+
+        .proc-card {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            padding: 1.15rem 1.35rem;
+            box-shadow: var(--shadow-sm);
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr 180px;
+            gap: 1rem;
+            align-items: start;
+            transition: box-shadow 0.2s;
+        }
+        .proc-card:hover { box-shadow: var(--shadow-md); }
+
+        .pc-name {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--navy-800);
+        }
+        .pc-compat {
+            font-size: 0.7rem;
+            color: var(--text-faint);
+            margin-top: 4px;
+            line-height: 1.4;
+        }
+        .pc-compat .warn { color: var(--red-500); font-weight: 600; }
+
+        .pc-label {
+            font-size: 0.6rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            color: var(--text-faint);
+            letter-spacing: 0.05em;
+            margin-bottom: 3px;
+        }
+        .pc-val {
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .pc-aesthetic {
+            font-size: 0.82rem;
+            font-style: italic;
+            color: var(--text-secondary);
+        }
+
+        .pc-cost { text-align: right; }
+        .pc-stars {
+            font-size: 0.9rem;
+            color: var(--amber-500);
+            letter-spacing: 1px;
+        }
+        .pc-unit {
+            font-size: 0.78rem;
+            font-weight: 600;
+            color: var(--text-primary);
+        }
+        .pc-setup {
+            font-size: 0.68rem;
+            color: var(--text-faint);
+        }
+
+        /* Proc table header */
+        .proc-thead {
+            display: grid;
+            grid-template-columns: 200px 1fr 1fr 180px;
+            gap: 1rem;
+            padding: 0 1.35rem;
+            margin-bottom: 0.4rem;
+        }
+        .proc-th {
+            font-size: 0.62rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--text-faint);
+        }
+        .proc-th:last-child { text-align: right; }
+
+        /* =========================================================
+           EMPTY STATE
+           ========================================================= */
+        .empty-msg {
+            text-align: center;
+            padding: 3rem 2rem;
+            color: var(--text-muted);
+            font-size: 0.9rem;
+        }
+        .empty-msg .empty-icon {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            opacity: 0.4;
+        }
+
+        /* =========================================================
+           FOOTER
+           ========================================================= */
+        .app-footer {
+            background: var(--navy-900);
+            color: rgba(255,255,255,0.5);
+            text-align: center;
+            padding: 1.25rem;
+            font-size: 0.72rem;
+            line-height: 1.7;
+        }
+        .app-footer strong { color: rgba(255,255,255,0.8); }
+
+        /* =========================================================
+           RESPONSIVE
+           ========================================================= */
+        @media (max-width: 1100px) {
+            .shell { grid-template-columns: 1fr; }
+            .sidebar {
+                position: static;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border);
+                padding: 1.25rem 1.5rem;
+            }
+            .filter-section { margin-bottom: 1.25rem; }
+            .main-panel { padding: 1.5rem; }
+            .mat-grid { grid-template-columns: 1fr; }
+            .proc-card {
+                grid-template-columns: 1fr 1fr;
+            }
+            .proc-thead { display: none; }
+        }
+
+        @media (max-width: 600px) {
+            .app-header { padding: 0 1rem; }
+            .brand-title { font-size: 1.1rem; }
+            .main-panel { padding: 1rem; }
+            .proc-card { grid-template-columns: 1fr; }
+        }
+
+        /* Utility: animated entrance */
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(12px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-in { animation: fadeUp 0.35s ease forwards; }
+    </style>
+</head>
+<body>
+
+    <!-- ====== HEADER ====== -->
+    <header class="app-header">
+        <div class="brand">
+            <div class="brand-title">Material-Aesthetic Selection Dashboard</div>
+            <div class="brand-sub">Integrated Design Project (CP302) · Dept. of Metallurgical &amp; Materials Engineering</div>
+        </div>
+        <div class="student-badge">
+            <strong>Kartik Mittal</strong><br>
+            <span class="roll">2023MMB1413 · IIT Ropar</span>
+        </div>
+    </header>
+
+    <!-- ====== SHELL ====== -->
+    <div class="shell">
+
+        <!-- ── SIDEBAR ── -->
+        <aside class="sidebar" id="sidebar">
+
+            <div class="filter-section">
+                <div class="filter-label"><span class="icon">1</span> Product Line</div>
+                <div class="select-wrap">
+                    <select class="filter-select" id="f-product">
+                        <option value="Consumer Electronics" selected>Consumer Electronics</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Kitchenware / Cutlery">Kitchenware / Cutlery</option>
+                        <option value="Wearables / Watches">Wearables / Watches</option>
+                        <option value="Automotive / Transport">Automotive / Transport</option>
+                        <option value="Medical Devices">Medical Devices</option>
+                        <option value="Toys / Recreational">Toys / Recreational</option>
+                        <option value="Architectural Hardware">Architectural Hardware</option>
+                        <option value="Sporting Goods">Sporting Goods</option>
+                        <option value="Industrial Tools">Industrial Tools</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-label"><span class="icon">2</span> Application / Use Context</div>
+                <div class="chip-row" id="f-context">
+                    <span class="filter-chip on" data-v="Office / Workspace">Office / Workspace</span>
+                    <span class="filter-chip" data-v="Casual / Home Use">Casual / Home</span>
+                    <span class="filter-chip" data-v="Outdoor / Harsh Environment">Outdoor / Harsh</span>
+                    <span class="filter-chip on" data-v="Luxury / Premium">Luxury / Premium</span>
+                    <span class="filter-chip" data-v="Medical / Hygienic">Medical / Hygienic</span>
+                    <span class="filter-chip" data-v="Sustainable / Eco-conscious">Sustainable / Eco</span>
+                    <span class="filter-chip" data-v="High-Performance / Engineered">High-Performance</span>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-label"><span class="icon">3</span> Material Family</div>
+                <div class="toggle-list" id="f-family">
+                    <label class="mat-toggle"><input type="checkbox" value="Metals" checked> Metals <span class="fam-hint">(Al, SS, Ti, Steel, Cu/Brass)</span></label>
+                    <label class="mat-toggle"><input type="checkbox" value="Polymers" checked> Polymers</label>
+                    <label class="mat-toggle"><input type="checkbox" value="Natural Materials" checked> Natural Materials <span class="fam-hint">(Wood, Bamboo)</span></label>
+                    <label class="mat-toggle"><input type="checkbox" value="Composites" checked> Composites <span class="fam-hint">(CFRP, GFRP)</span></label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-label"><span class="icon">4</span> Finish Priority</div>
+                <div class="select-wrap">
+                    <select class="filter-select" id="f-finish">
+                        <option value="No preference" selected>No preference</option>
+                        <option value="Mirror/High-gloss">Mirror / High-gloss</option>
+                        <option value="Satin/Semi-gloss">Satin / Semi-gloss</option>
+                        <option value="Matte/Bead-blasted">Matte / Bead-blasted</option>
+                        <option value="Brushed/Directional">Brushed / Directional</option>
+                        <option value="Industrial/As-built">Industrial / As-built</option>
+                    </select>
+                </div>
+            </div>
+
+        </aside>
+
+        <!-- ── MAIN ── -->
+        <main class="main-panel">
+
+            <!-- Section C: Perception Summary -->
+            <div class="sec-head">
+                <div class="sec-icon amber">◆</div>
+                <h2>Aesthetic Perception Summary</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="perception-bar" id="perc-bar">
+                <div class="ptag-row" id="perc-cloud"></div>
+            </div>
+
+            <!-- Section A: Materials -->
+            <div class="sec-head">
+                <div class="sec-icon blue">■</div>
+                <h2>Material Recommendations</h2>
+                <div class="divider"></div>
+                <span class="count-badge" id="mat-count">0 results</span>
+            </div>
+            <div class="stats-bar" id="stats-bar"></div>
+            <div class="mat-grid" id="mat-grid"></div>
+
+            <!-- Section B: Processes -->
+            <div class="sec-head">
+                <div class="sec-icon green">▲</div>
+                <h2>Manufacturing Process Recommendations</h2>
+                <div class="divider"></div>
+            </div>
+            <div class="proc-section">
+                <div class="proc-thead">
+                    <div class="proc-th">Process</div>
+                    <div class="proc-th">Achievable Specs (Ra / GU)</div>
+                    <div class="proc-th">Aesthetic Character</div>
+                    <div class="proc-th">Cost Breakdown</div>
+                </div>
+                <div class="proc-grid" id="proc-grid"></div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- ====== FOOTER ====== -->
+    <footer class="app-footer">
+        <strong>References:</strong>
+        [1] ASM Handbook Vol. 5 — Surface Engineering &nbsp;·&nbsp;
+        [2] ISO 4287 — Geometrical Product Specifications &nbsp;·&nbsp;
+        [3] Ashby &amp; Johnson, <em>Materials and Design</em>, 3rd ed. (2014) &nbsp;·&nbsp;
+        [4] CES EduPack / Granta Design Database &nbsp;·&nbsp;
+        [5] Custompart.net Manufacturing Cost Models &nbsp;·&nbsp;
+        [6] Karana et al., <em>Materials Experience</em> (2009)<br>
+        © 2025 Kartik Mittal · IIT Ropar · CP302 Integrated Design Project
+    </footer>
+
+    <!-- ====== DATA + LOGIC ====== -->
+    <script>
+    "use strict";
+
+    /*  ================================================================
+        MATERIAL-FINISH DATABASE
+        ----------------------------------------------------------------
+        Sources key:
+          [1] ASM Handbook Vol. 5: Surface Engineering
+          [2] ISO 4287: Geometrical Product Specifications (Ra scale)
+          [3] Ashby & Johnson, Materials and Design, 3rd ed. (2014)
+          [4] CES EduPack / Granta Design material property data
+          [5] Custompart.net / published manufacturing cost models
+          [6] Karana et al., Materials Experience (2009)
+        ================================================================ */
+
+    const DB = [
+
+    /* ─── 1  ALUMINUM 6063 — BEAD BLASTED + ANODIZED ─── */
+    {
+        id: 1,
+        productLines: ["Consumer Electronics", "Wearables / Watches", "Industrial Tools", "Sporting Goods"],
+        applications: ["Luxury / Premium", "High-Performance / Engineered", "Office / Workspace"],
+        materialFamily: "Metals",
+        materialName: "Aluminum Alloy",
+        grade: "AA 6063-T5",
+        surfaceCondition: "Bead Blasted + Type II Clear Anodize",
+        Ra_min: 0.8, Ra_max: 1.6,
+        gloss_min: 10, gloss_max: 25,
+        finishCategory: "Matte/Bead-blasted",
+        perceptionTags: ["Modern", "Technical", "Understated", "Clean"],
+        rationale: "Excellent strength-to-weight ratio with a durable 10–25 µm oxide layer that accepts dye. Bead-blasted substrate scatters light isotropically, hiding fingerprints on frequently handled surfaces.",
+        sources: ["1", "2", "3"],
+        processes: [
+            { name: "Bead Blasting", Ra_output: "0.8–2.0 µm", gloss_output: "8–25 GU", aestheticChar: "Satin-matte, isotropic light scattering", compatibility: "Standard for Al, SS, Ti alloys. Avoid on thin-walled parts < 0.5 mm.", setupCost: "Low", unitCostRange: "$2–8/unit", costTier: 2, source: "1, 5" },
+            { name: "Type II Anodizing", Ra_output: "Substrate ± 0.1 µm", gloss_output: "Substrate dependent", aestheticChar: "Metallic depth with dyeable color range; excellent UV stability", compatibility: "Only for aluminum alloys. Not suitable for high-Si casting alloys (> 7% Si).", setupCost: "Medium", unitCostRange: "$3–10/unit", costTier: 3, source: "1, 5" },
+            { name: "Type III Hard Anodize", Ra_output: "Substrate + 0.2 µm", gloss_output: "5–15 GU", aestheticChar: "Dark grey/black, industrial, extremely hard (60+ HRC equivalent)", compatibility: "Only for aluminum alloys. Not recommended for 2xxx or 7xxx series.", setupCost: "High", unitCostRange: "$8–20/unit", costTier: 4, source: "1, 5" }
+        ]
+    },
+
+    /* ─── 2  SS 316L — MIRROR / ELECTROPOLISHED ─── */
+    {
+        id: 2,
+        productLines: ["Wearables / Watches", "Medical Devices", "Kitchenware / Cutlery", "Automotive / Transport"],
+        applications: ["Luxury / Premium", "Medical / Hygienic", "High-Performance / Engineered"],
+        materialFamily: "Metals",
+        materialName: "Stainless Steel",
+        grade: "316L (Medical Grade)",
+        surfaceCondition: "Mirror Polished / Electropolished",
+        Ra_min: 0.025, Ra_max: 0.1,
+        gloss_min: 85, gloss_max: 98,
+        finishCategory: "Mirror/High-gloss",
+        perceptionTags: ["Premium", "Pristine", "Clinical", "Expensive"],
+        rationale: "Highly corrosion-resistant austenitic steel with non-reactive Mo-bearing composition. Electropolished surface eliminates micro-crevices, achieving Ra < 0.1 µm for aseptic requirements.",
+        sources: ["1", "2", "4"],
+        processes: [
+            { name: "Electropolishing", Ra_output: "< 0.1 µm", gloss_output: "> 90 GU", aestheticChar: "Brilliant, sterile, ultra-smooth isotropic reflectance", compatibility: "Best for austenitic SS (304, 316). Difficult on ferritic grades.", setupCost: "Medium", unitCostRange: "$5–15/unit", costTier: 4, source: "1, 5" },
+            { name: "Fine Lapping", Ra_output: "0.02–0.05 µm", gloss_output: "90–100 GU", aestheticChar: "Optical-grade mirror; zero visible texture at any angle", compatibility: "Any metal. Extremely slow process, limited to flat/convex surfaces.", setupCost: "High", unitCostRange: "$20–60/unit", costTier: 5, source: "1, 5" }
+        ]
+    },
+
+    /* ─── 3  SS 304 — BRUSHED No.4 ─── */
+    {
+        id: 3,
+        productLines: ["Consumer Electronics", "Furniture", "Architectural Hardware", "Kitchenware / Cutlery"],
+        applications: ["Office / Workspace", "Luxury / Premium", "Casual / Home Use"],
+        materialFamily: "Metals",
+        materialName: "Stainless Steel",
+        grade: "AISI 304 (18/8)",
+        surfaceCondition: "Brushed No. 4 Finish",
+        Ra_min: 0.4, Ra_max: 0.8,
+        gloss_min: 25, gloss_max: 45,
+        finishCategory: "Brushed/Directional",
+        perceptionTags: ["Professional", "Directional", "Durable", "Industrial-refined"],
+        rationale: "Industry standard for appliance and architectural panels. Unidirectional grain hides minor scratches while maintaining a sophisticated metallic sheen under diffuse lighting.",
+        sources: ["1", "2", "3"],
+        processes: [
+            { name: "Abrasive Belt Brushing", Ra_output: "0.4–1.0 µm", gloss_output: "20–50 GU", aestheticChar: "Directional 'grain' lines; conceals wear patterns over time", compatibility: "Most metals. Difficult on complex 3D curves and deep channels.", setupCost: "Low", unitCostRange: "$1–4/unit", costTier: 1, source: "1, 5" },
+            { name: "Passivation (Citric Acid)", Ra_output: "No change", gloss_output: "No change", aestheticChar: "Invisible; restores passive Cr₂O₃ layer for corrosion resistance", compatibility: "Stainless steel only. Required after machining or welding.", setupCost: "Low", unitCostRange: "$1–3/unit", costTier: 1, source: "1, 5" }
+        ]
+    },
+
+    /* ─── 4  BLACK WALNUT — HAND FINISHED ─── */
+    {
+        id: 4,
+        productLines: ["Furniture", "Architectural Hardware", "Consumer Electronics", "Kitchenware / Cutlery"],
+        applications: ["Sustainable / Eco-conscious", "Luxury / Premium", "Casual / Home Use", "Office / Workspace"],
+        materialFamily: "Natural Materials",
+        materialName: "Black Walnut",
+        grade: "FAS Grade Solid Hardwood",
+        surfaceCondition: "Hand-sanded 320 grit + Tung Oil / Beeswax",
+        Ra_min: 1.6, Ra_max: 3.2,
+        gloss_min: 8, gloss_max: 20,
+        finishCategory: "Matte/Bead-blasted",
+        perceptionTags: ["Warm", "Heritage", "Organic", "Sustainable", "Crafted"],
+        rationale: "Tactile warmth and visual richness from natural grain. Oil-wax finish protects against moisture while allowing the wood to 'breathe' and develop a unique patina over years of handling.",
+        sources: ["3", "4", "6"],
+        processes: [
+            { name: "Precision Sanding (Multi-grit)", Ra_output: "1.6–6.3 µm (grit dependent)", gloss_output: "5–20 GU", aestheticChar: "Reveals grain depth; progressively finer grits create silky tactile feel", compatibility: "All hardwoods and softwoods. Grain raising may occur on ring-porous species.", setupCost: "Low", unitCostRange: "$2–6/unit", costTier: 1, source: "3, 5" },
+            { name: "Hand Oil / Wax Application", Ra_output: "Slight reduction (fills pores)", gloss_output: "8–25 GU", aestheticChar: "Natural luster; enhances grain contrast and color saturation", compatibility: "All wood species. Drying time 24–72 hrs. Not food-safe unless specified.", setupCost: "Low", unitCostRange: "$3–8/unit", costTier: 2, source: "3, 5" }
+        ]
+    },
+
+    /* ─── 5  TITANIUM — PVD TiN ─── */
+    {
+        id: 5,
+        productLines: ["Wearables / Watches", "Industrial Tools", "Automotive / Transport", "Medical Devices"],
+        applications: ["High-Performance / Engineered", "Outdoor / Harsh Environment", "Luxury / Premium"],
+        materialFamily: "Metals",
+        materialName: "Titanium Alloy",
+        grade: "Ti-6Al-4V (Grade 5)",
+        surfaceCondition: "PVD Coated (TiN — Titanium Nitride)",
+        Ra_min: 0.15, Ra_max: 0.4,
+        gloss_min: 60, gloss_max: 85,
+        finishCategory: "Satin/Semi-gloss",
+        perceptionTags: ["High-tech", "Aggressive", "Gold-tone", "Low-friction"],
+        rationale: "PVD TiN adds 1–5 µm coating with hardness exceeding 2000 HV and a distinctive gold-metallic hue. Widely used in premium watch cases and cutting tools for both aesthetics and performance.",
+        sources: ["1", "2", "5"],
+        processes: [
+            { name: "PVD Coating (TiN/TiAlN/CrN)", Ra_output: "Substrate Ra ± 0.05 µm", gloss_output: "60–90 GU (color dependent)", aestheticChar: "Thin-film interference colors: gold (TiN), blue-black (TiAlN), silver (CrN)", compatibility: "Any metal or ceramic substrate. Requires vacuum chamber; batch process.", setupCost: "High", unitCostRange: "$15–50/unit", costTier: 5, source: "1, 5" },
+            { name: "Precision Grinding", Ra_output: "0.1–0.4 µm", gloss_output: "50–80 GU", aestheticChar: "Flat, reflective surfaces with controlled geometry; pre-PVD preparation", compatibility: "All metals. Limited to accessible flat/cylindrical surfaces.", setupCost: "Medium", unitCostRange: "$5–15/unit", costTier: 3, source: "1, 5" }
+        ]
+    },
+
+    /* ─── 6  POLYCARBONATE — HIGH GLOSS MOLD ─── */
+    {
+        id: 6,
+        productLines: ["Consumer Electronics", "Toys / Recreational", "Medical Devices", "Automotive / Transport", "Wearables / Watches"],
+        applications: ["Casual / Home Use", "Office / Workspace", "Luxury / Premium"],
+        materialFamily: "Polymers",
+        materialName: "Polycarbonate (PC)",
+        grade: "Optical / General Purpose Grade",
+        surfaceCondition: "Injection Molded — SPI A-1 High Gloss",
+        Ra_min: 0.012, Ra_max: 0.05,
+        gloss_min: 92, gloss_max: 100,
+        finishCategory: "Mirror/High-gloss",
+        perceptionTags: ["Transparent", "Futuristic", "Lightweight-feel", "Pure"],
+        rationale: "Impact resistance 250× greater than glass with 88% light transmission. Diamond-polished mold cavities produce near-optical surfaces directly from the tool, eliminating secondary polishing.",
+        sources: ["4", "3", "5"],
+        processes: [
+            { name: "Precision Injection Molding (SPI A-1)", Ra_output: "0.012–0.05 µm", gloss_output: "90–100 GU", aestheticChar: "Liquid-smooth, mirror-like surface replicated from diamond-polished mold", compatibility: "PC, PMMA, ABS. Requires SPI A-1/A-2 mold finish ($$$).", setupCost: "High", unitCostRange: "$0.50–2/unit (amortized)", costTier: 2, source: "4, 5" },
+            { name: "Vapor Polishing (Acetone/DCM)", Ra_output: "< 0.05 µm", gloss_output: "95–100 GU", aestheticChar: "Chemical smoothing of layer lines or minor imperfections; glass-like clarity", compatibility: "PC, ABS, PMMA. Not suitable for PE, PP. Requires fume extraction.", setupCost: "Low", unitCostRange: "$1–5/unit", costTier: 2, source: "4, 5" }
+        ]
+    },
+
+    /* ─── 7  CFRP — MATTE CLEAR COAT ─── */
+    {
+        id: 7,
+        productLines: ["Sporting Goods", "Automotive / Transport", "Consumer Electronics"],
+        applications: ["High-Performance / Engineered", "Luxury / Premium"],
+        materialFamily: "Composites",
+        materialName: "Carbon Fiber Reinforced Polymer (CFRP)",
+        grade: "3K Twill Weave / Epoxy Matrix",
+        surfaceCondition: "Vacuum Bagged + Matte Clear Coat",
+        Ra_min: 0.4, Ra_max: 1.2,
+        gloss_min: 5, gloss_max: 15,
+        finishCategory: "Matte/Bead-blasted",
+        perceptionTags: ["Structural", "Lightweight-feel", "Engineered", "Modern"],
+        rationale: "Exposes the technical weave pattern without reflective glare. UV-stable matte polyurethane clear coat protects the epoxy matrix while emphasising the layup structure as a design feature.",
+        sources: ["3", "4", "5"],
+        processes: [
+            { name: "Vacuum Bag Consolidation", Ra_output: "0.3–1.0 µm (tool side)", gloss_output: "5–60 GU (tool dependent)", aestheticChar: "Controlled fiber compaction; visible weave as design element", compatibility: "All fiber-reinforced thermoset composites. Autoclave variant for aerospace grade.", setupCost: "Medium", unitCostRange: "$10–30/unit", costTier: 4, source: "3, 5" },
+            { name: "Clear Coat Spraying (PU/Acrylic)", Ra_output: "0.2–1.5 µm", gloss_output: "5–90 GU (matte to gloss)", aestheticChar: "Depth and protection; matte grades suppress reflections, gloss grades add 'wet' look", compatibility: "All composites and wood surfaces. Requires dust-free environment.", setupCost: "Low", unitCostRange: "$3–8/unit", costTier: 2, source: "5" }
+        ]
+    },
+
+    /* ─── 8  BRASS C36000 — PATINATED ─── */
+    {
+        id: 8,
+        productLines: ["Kitchenware / Cutlery", "Architectural Hardware", "Furniture"],
+        applications: ["Luxury / Premium", "Casual / Home Use", "Sustainable / Eco-conscious"],
+        materialFamily: "Metals",
+        materialName: "Brass",
+        grade: "C36000 (Free-Cutting Brass)",
+        surfaceCondition: "Chemical Patina (Liver of Sulphur)",
+        Ra_min: 1.2, Ra_max: 3.5,
+        gloss_min: 4, gloss_max: 15,
+        finishCategory: "Industrial/As-built",
+        perceptionTags: ["Heritage", "Warm", "Aged", "Crafted"],
+        rationale: "Controlled oxidation produces mottled brown-to-black tones on a warm yellow base. Wax sealant stabilises the patina while allowing selective wear to reveal underlying brass at contact points.",
+        sources: ["1", "3", "6"],
+        processes: [
+            { name: "Chemical Patination", Ra_output: "1.0–4.0 µm", gloss_output: "< 15 GU", aestheticChar: "Mottled, organic oxidation; each piece develops unique character", compatibility: "Copper-based alloys only (brass, bronze). Not for stainless steel or aluminum.", setupCost: "Low", unitCostRange: "$4–12/unit", costTier: 2, source: "1, 3" },
+            { name: "Lacquer / Wax Seal", Ra_output: "Slight smoothing", gloss_output: "+5–15 GU over substrate", aestheticChar: "Locks patina state; adds warm depth; prevents further oxidation", compatibility: "All metals and wood. Requires re-application every 6–12 months on handled items.", setupCost: "Low", unitCostRange: "$2–5/unit", costTier: 1, source: "3, 5" }
+        ]
+    },
+
+    /* ─── 9  ABS/PC — VDI TEXTURED MOLD ─── */
+    {
+        id: 9,
+        productLines: ["Consumer Electronics", "Industrial Tools", "Medical Devices", "Automotive / Transport"],
+        applications: ["High-Performance / Engineered", "Office / Workspace", "Casual / Home Use"],
+        materialFamily: "Polymers",
+        materialName: "ABS / PC Blend",
+        grade: "Flame Retardant (UL94 V-0)",
+        surfaceCondition: "EDM Textured Mold — VDI 24 Fine Texture",
+        Ra_min: 1.6, Ra_max: 2.5,
+        gloss_min: 3, gloss_max: 8,
+        finishCategory: "Matte/Bead-blasted",
+        perceptionTags: ["Robust", "Soft-touch", "Functional", "Matte"],
+        rationale: "Controlled spark-eroded mold cavity creates a non-directional micro-texture that is non-slip and hides mold parting lines. FR grade meets regulatory requirements for electronics enclosures.",
+        sources: ["4", "1", "5"],
+        processes: [
+            { name: "Injection Molding (VDI/MT Texture)", Ra_output: "0.4–12 µm (VDI grade)", gloss_output: "2–60 GU (grade dependent)", aestheticChar: "Isotropic matte to semi-gloss; texture transferred from precision-EDM'd mold", compatibility: "ABS, PC, PP, PA. Draft angle must increase with texture depth (min 1°/0.025mm).", setupCost: "High", unitCostRange: "$0.30–1.50/unit (amortized)", costTier: 2, source: "4, 5" },
+            { name: "Pad Printing / Laser Marking", Ra_output: "Localised — no global change", gloss_output: "Localised", aestheticChar: "Adds branding, icons, regulatory marks directly onto textured surface", compatibility: "All polymers. Laser marking requires contrast testing per material & colour.", setupCost: "Medium", unitCostRange: "$0.50–3/unit", costTier: 2, source: "5" }
+        ]
+    },
+
+    /* ─── 10  BAMBOO — FINE SANDED ─── */
+    {
+        id: 10,
+        productLines: ["Furniture", "Kitchenware / Cutlery", "Consumer Electronics", "Toys / Recreational"],
+        applications: ["Sustainable / Eco-conscious", "Casual / Home Use", "Office / Workspace"],
+        materialFamily: "Natural Materials",
+        materialName: "Moso Bamboo",
+        grade: "Vertical Grain Laminate — Carbonised",
+        surfaceCondition: "Fine Sanded + Water-based PU Matte",
+        Ra_min: 1.0, Ra_max: 2.0,
+        gloss_min: 8, gloss_max: 18,
+        finishCategory: "Matte/Bead-blasted",
+        perceptionTags: ["Sustainable", "Linear", "Zen", "Eco-modern"],
+        rationale: "Matures in 3–5 years vs. 30+ for hardwoods, making it one of the most renewable structural materials. Vertical lamination emphasises linear grain, and carbonisation deepens the colour to caramel tones.",
+        sources: ["3", "4", "6"],
+        processes: [
+            { name: "Precision Sanding (Multi-grit)", Ra_output: "1.6–6.3 µm (grit dependent)", gloss_output: "5–20 GU", aestheticChar: "Reveals grain depth; progressively finer grits create silky tactile feel", compatibility: "All hardwoods and softwoods. Grain raising may occur on ring-porous species.", setupCost: "Low", unitCostRange: "$2–6/unit", costTier: 1, source: "3, 5" },
+            { name: "Clear Coat Spraying (PU/Acrylic)", Ra_output: "0.2–1.5 µm", gloss_output: "5–90 GU (matte to gloss)", aestheticChar: "Depth and protection; matte grades suppress reflections, gloss grades add 'wet' look", compatibility: "All composites and wood surfaces. Requires dust-free environment.", setupCost: "Low", unitCostRange: "$3–8/unit", costTier: 2, source: "5" }
+        ]
+    },
+
+    /* ─── 11  H13 TOOL STEEL — SHOT PEENED ─── */
+    {
+        id: 11,
+        productLines: ["Industrial Tools", "Automotive / Transport"],
+        applications: ["High-Performance / Engineered", "Outdoor / Harsh Environment"],
+        materialFamily: "Metals",
+        materialName: "Tool Steel",
+        grade: "AISI H13 (1.2344)",
+        surfaceCondition: "Shot Peened — Almen A 0.010–0.014″",
+        Ra_min: 2.0, Ra_max: 6.3,
+        gloss_min: 2, gloss_max: 8,
+        finishCategory: "Industrial/As-built",
+        perceptionTags: ["Rugged", "Structural", "Industrial", "Tough"],
+        rationale: "Introduces compressive residual stress of 400–600 MPa in the surface layer, improving fatigue life by 200–600%. The coarse, dimpled texture signals heavy-duty durability and engineered toughness.",
+        sources: ["1", "2", "5"],
+        processes: [
+            { name: "Shot Peening", Ra_output: "1.6–6.3 µm", gloss_output: "< 10 GU", aestheticChar: "Dimpled, non-reflective, visibly rugged and engineered", compatibility: "Most structural metals (steel, Ti, Al). Avoid on thin sections < 1 mm.", setupCost: "Medium", unitCostRange: "$5–12/unit", costTier: 3, source: "1, 5" },
+            { name: "Black Oxide Coating", Ra_output: "No significant change", gloss_output: "< 5 GU", aestheticChar: "Uniform matte black; zero dimensional change; anti-glare", compatibility: "Carbon and alloy steels only. Not for stainless steel or aluminum.", setupCost: "Low", unitCostRange: "$2–6/unit", costTier: 2, source: "1, 5" }
+        ]
+    },
+
+    /* ─── 12  ABS — BEAD BLAST TEXTURE ─── */
+    {
+        id: 12,
+        productLines: ["Consumer Electronics", "Toys / Recreational", "Sporting Goods"],
+        applications: ["Casual / Home Use", "Office / Workspace"],
+        materialFamily: "Polymers",
+        materialName: "ABS (Acrylonitrile Butadiene Styrene)",
+        grade: "General Purpose / High-Impact",
+        surfaceCondition: "Bead-Blast Textured Mold — SPI D-2",
+        Ra_min: 0.8, Ra_max: 1.8,
+        gloss_min: 8, gloss_max: 22,
+        finishCategory: "Matte/Bead-blasted",
+        perceptionTags: ["Neutral", "Accessible", "Lightweight-feel", "Clean"],
+        rationale: "Cost-effective with excellent impact resistance and paintability. Bead-blasted mold texture provides a premium 'soft' aesthetic to commodity plastic, comparable to higher-cost PC at a fraction of the price.",
+        sources: ["4", "3", "5"],
+        processes: [
+            { name: "Injection Molding (VDI/MT Texture)", Ra_output: "0.4–12 µm (VDI grade)", gloss_output: "2–60 GU (grade dependent)", aestheticChar: "Isotropic matte to semi-gloss; texture transferred from precision-EDM'd mold", compatibility: "ABS, PC, PP, PA. Draft angle must increase with texture depth (min 1°/0.025mm).", setupCost: "High", unitCostRange: "$0.30–1.50/unit (amortized)", costTier: 2, source: "4, 5" },
+            { name: "Spray Painting", Ra_output: "0.5–2.0 µm", gloss_output: "5–95 GU (paint type)", aestheticChar: "Unlimited color palette; soft-touch, metallic, and pearlescent finishes available", compatibility: "All polymers (with primer). Poor adhesion on PE/PP without flame treatment.", setupCost: "Medium", unitCostRange: "$2–8/unit", costTier: 3, source: "5" }
+        ]
+    },
+
+    /* ─── 13  GFRP — GLASS FIBER ─── */
+    {
+        id: 13,
+        productLines: ["Automotive / Transport", "Sporting Goods", "Architectural Hardware", "Furniture", "Toys / Recreational"],
+        applications: ["Outdoor / Harsh Environment", "High-Performance / Engineered", "Sustainable / Eco-conscious"],
+        materialFamily: "Composites",
+        materialName: "Glass Fiber Reinforced Polymer (GFRP)",
+        grade: "E-Glass / Polyester Hand Layup",
+        surfaceCondition: "Gel Coat — Semi-gloss White",
+        Ra_min: 0.3, Ra_max: 0.8,
+        gloss_min: 55, gloss_max: 75,
+        finishCategory: "Satin/Semi-gloss",
+        perceptionTags: ["Durable", "Weatherproof", "Clean", "Lightweight-feel"],
+        rationale: "Gel coat provides a smooth, pigmented surface that is integrally bonded to the laminate. Excellent UV and weather resistance makes GFRP ideal for outdoor furniture, boat hulls, and architectural cladding.",
+        sources: ["3", "4", "5"],
+        processes: [
+            { name: "Gel Coat Application", Ra_output: "0.2–0.8 µm", gloss_output: "50–80 GU", aestheticChar: "Smooth, opaque, automotive-quality surface directly from the mold", compatibility: "Polyester and vinyl ester laminates. Not compatible with epoxy without primer.", setupCost: "Low", unitCostRange: "$3–10/unit", costTier: 2, source: "3, 5" },
+            { name: "Wet Sanding + Buffing", Ra_output: "< 0.1 µm", gloss_output: "80–95 GU", aestheticChar: "Show-car finish; removes orange peel from gel coat for mirror-like surface", compatibility: "Gel-coated parts only. Labour-intensive; not scalable for high volumes.", setupCost: "Low", unitCostRange: "$8–20/unit", costTier: 3, source: "5" }
+        ]
+    },
+
+    /* ─── 14  COPPER — BRIGHT DIP ─── */
+    {
+        id: 14,
+        productLines: ["Architectural Hardware", "Kitchenware / Cutlery", "Wearables / Watches"],
+        applications: ["Luxury / Premium", "Casual / Home Use", "Sustainable / Eco-conscious"],
+        materialFamily: "Metals",
+        materialName: "Copper",
+        grade: "C11000 (ETP — Electrolytic Tough Pitch)",
+        surfaceCondition: "Bright Acid Dip + Clear Lacquer",
+        Ra_min: 0.05, Ra_max: 0.2,
+        gloss_min: 70, gloss_max: 90,
+        finishCategory: "Mirror/High-gloss",
+        perceptionTags: ["Warm", "Premium", "Antimicrobial", "Heritage"],
+        rationale: "Inherent antimicrobial property (EPA registered) eliminates 99.9% of bacteria within 2 hours. Bright dip reveals copper's characteristic warm pink-orange tone before lacquer locks the pristine state.",
+        sources: ["1", "4", "3"],
+        processes: [
+            { name: "Bright Acid Dip", Ra_output: "0.05–0.2 µm", gloss_output: "70–95 GU", aestheticChar: "Chemical polishing; uniform reflective warmth without mechanical directional marks", compatibility: "Copper and high-Cu alloys only. Aggressive on zinc-rich brasses.", setupCost: "Low", unitCostRange: "$3–8/unit", costTier: 2, source: "1, 5" },
+            { name: "Clear Lacquer Coat", Ra_output: "Slight smoothing", gloss_output: "+5–10 GU", aestheticChar: "Preserves bright surface; prevents tarnishing and green patina formation", compatibility: "All metals. Lacquer may yellow with UV exposure; select UV-stable formulations.", setupCost: "Low", unitCostRange: "$2–5/unit", costTier: 1, source: "5" }
+        ]
+    },
+
+    /* ─── 15  MILD STEEL — POWDER COATED ─── */
+    {
+        id: 15,
+        productLines: ["Furniture", "Architectural Hardware", "Industrial Tools", "Toys / Recreational", "Kitchenware / Cutlery"],
+        applications: ["Casual / Home Use", "Outdoor / Harsh Environment", "Office / Workspace"],
+        materialFamily: "Metals",
+        materialName: "Mild Steel",
+        grade: "ASTM A36 / EN S235",
+        surfaceCondition: "Sandblasted + Powder Coated (RAL)",
+        Ra_min: 0.8, Ra_max: 2.5,
+        gloss_min: 15, gloss_max: 85,
+        finishCategory: "Satin/Semi-gloss",
+        perceptionTags: ["Versatile", "Durable", "Colourful", "Accessible"],
+        rationale: "Powder coating creates a thick (60–120 µm), chip-resistant layer available in virtually any RAL colour. Combined with zinc phosphate pre-treatment, it provides excellent corrosion protection at low cost.",
+        sources: ["1", "3", "5"],
+        processes: [
+            { name: "Abrasive Blasting (Pre-treatment)", Ra_output: "2.0–6.0 µm", gloss_output: "< 10 GU", aestheticChar: "Anchor profile for coating adhesion; removes mill scale and rust", compatibility: "All ferrous metals. Profile depth matched to coating thickness.", setupCost: "Low", unitCostRange: "$2–6/unit", costTier: 2, source: "1, 5" },
+            { name: "Electrostatic Powder Coating", Ra_output: "0.8–3.0 µm (texture grade)", gloss_output: "15–95 GU (gloss level)", aestheticChar: "Uniform colour; matte, satin, or gloss; textured options (wrinkle, hammer-tone)", compatibility: "Electrically conductive substrates. Max service temp ~200°C.", setupCost: "Medium", unitCostRange: "$3–10/unit", costTier: 2, source: "1, 5" }
+        ]
+    },
+
+    /* ─── 16  NYLON PA12 — SLS 3D PRINTED ─── */
+    {
+        id: 16,
+        productLines: ["Consumer Electronics", "Medical Devices", "Sporting Goods", "Industrial Tools"],
+        applications: ["High-Performance / Engineered", "Office / Workspace"],
+        materialFamily: "Polymers",
+        materialName: "Nylon (PA 12)",
+        grade: "SLS-Grade — 50 µm layer",
+        surfaceCondition: "As-printed + Vapor Smoothed",
+        Ra_min: 1.5, Ra_max: 4.0,
+        gloss_min: 5, gloss_max: 30,
+        finishCategory: "Matte/Bead-blasted",
+        perceptionTags: ["Engineered", "Functional", "Modern", "Technical"],
+        rationale: "Selective Laser Sintering produces complex geometries impossible with injection molding. Vapor smoothing reduces the characteristic powder-bed texture from Ra ~15 µm to 1.5–4 µm while sealing porosity. ⚠ Limited published gloss data for smoothed SLS PA12.",
+        sources: ["4", "5"],
+        processes: [
+            { name: "SLS 3D Printing", Ra_output: "6–16 µm (as-printed)", gloss_output: "< 5 GU", aestheticChar: "Granular, powder-bed texture; visible layer lines on curved surfaces", compatibility: "PA12, PA11, TPU. Not suitable for transparent parts.", setupCost: "High", unitCostRange: "$8–40/unit", costTier: 4, source: "4, 5" },
+            { name: "Chemical Vapor Smoothing", Ra_output: "1.5–4.0 µm", gloss_output: "10–35 GU ⚠", aestheticChar: "Semi-gloss, sealed surface; approaches injection-molded appearance", compatibility: "PA12, PA11. Process chemical (e.g. AMT PostPro) is proprietary.", setupCost: "Medium", unitCostRange: "$5–15/unit", costTier: 3, source: "4, 5" }
+        ]
+    },
+
+    /* ─── 17  TEAK — MARINE GRADE ─── */
+    {
+        id: 17,
+        productLines: ["Furniture", "Sporting Goods", "Architectural Hardware"],
+        applications: ["Outdoor / Harsh Environment", "Luxury / Premium", "Sustainable / Eco-conscious"],
+        materialFamily: "Natural Materials",
+        materialName: "Teak (Tectona grandis)",
+        grade: "Plantation-Grown / FSC Certified",
+        surfaceCondition: "Marine Sanded + Teak Oil Saturated",
+        Ra_min: 2.0, Ra_max: 4.5,
+        gloss_min: 4, gloss_max: 12,
+        finishCategory: "Industrial/As-built",
+        perceptionTags: ["Weatherproof", "Warm", "Heritage", "Sustainable", "Organic"],
+        rationale: "Naturally high silica and oil content (oleoresin) provides exceptional rot and UV resistance without chemical treatment. The golden-brown tone weathers to silver-grey if left unsealed — both states are considered premium aesthetics.",
+        sources: ["3", "4", "6"],
+        processes: [
+            { name: "Precision Sanding (Multi-grit)", Ra_output: "1.6–6.3 µm (grit dependent)", gloss_output: "5–20 GU", aestheticChar: "Reveals grain depth; progressively finer grits create silky tactile feel", compatibility: "All hardwoods and softwoods. Grain raising may occur on ring-porous species.", setupCost: "Low", unitCostRange: "$2–6/unit", costTier: 1, source: "3, 5" },
+            { name: "Natural Oil Saturation (Teak/Tung)", Ra_output: "Slight reduction", gloss_output: "5–15 GU", aestheticChar: "Deepens color, enhances figure, provides water-beading surface", compatibility: "All tropical and temperate hardwoods. Annual re-oiling recommended for outdoor use.", setupCost: "Low", unitCostRange: "$3–8/unit", costTier: 2, source: "3, 5" }
+        ]
+    },
+
+    /* ─── 18  PMMA (ACRYLIC) — CAST OPTICAL ─── */
+    {
+        id: 18,
+        productLines: ["Architectural Hardware", "Furniture", "Consumer Electronics", "Toys / Recreational"],
+        applications: ["Luxury / Premium", "Casual / Home Use", "Office / Workspace"],
+        materialFamily: "Polymers",
+        materialName: "PMMA (Acrylic — Plexiglas®)",
+        grade: "Cast Optical Grade — Cell Cast",
+        surfaceCondition: "Flame Polished Edges + As-cast Faces",
+        Ra_min: 0.01, Ra_max: 0.03,
+        gloss_min: 95, gloss_max: 100,
+        finishCategory: "Mirror/High-gloss",
+        perceptionTags: ["Transparent", "Premium", "Pure", "Futuristic", "Lightweight-feel"],
+        rationale: "92% light transmission — optically superior to glass. Cell-cast PMMA has 10× the impact resistance of glass and can be flame-polished to optically clear edges, making it the standard for luxury display cases and designer lighting.",
+        sources: ["4", "3", "5"],
+        processes: [
+            { name: "Flame Polishing", Ra_output: "< 0.02 µm", gloss_output: "95–100 GU", aestheticChar: "Crystal-clear edge finish; melts micro-roughness into smooth meniscus", compatibility: "PMMA and PC only. Thickness > 3 mm recommended. Fire risk — requires training.", setupCost: "Low", unitCostRange: "$1–4/unit", costTier: 1, source: "4, 5" },
+            { name: "CNC Diamond-Fly Cutting", Ra_output: "< 0.01 µm", gloss_output: "98–100 GU", aestheticChar: "Optical-grade flat surfaces; mirror finish directly from tool", compatibility: "PMMA, PC, soft metals (Al, Cu). Single-point diamond tooling is extremely expensive.", setupCost: "High", unitCostRange: "$10–40/unit", costTier: 5, source: "1, 5" }
+        ]
+    },
+
+    /* ─── 19  POLYPROPYLENE — FOOD GRADE ─── */
+    {
+        id: 19,
+        productLines: ["Kitchenware / Cutlery", "Medical Devices", "Toys / Recreational", "Consumer Electronics"],
+        applications: ["Medical / Hygienic", "Casual / Home Use", "Sustainable / Eco-conscious"],
+        materialFamily: "Polymers",
+        materialName: "Polypropylene (PP)",
+        grade: "Copolymer — FDA / EU 10/2011 Food Contact",
+        surfaceCondition: "SPI B-1 Semi-gloss Mold Finish",
+        Ra_min: 0.05, Ra_max: 0.5,
+        gloss_min: 50, gloss_max: 75,
+        finishCategory: "Satin/Semi-gloss",
+        perceptionTags: ["Clean", "Accessible", "Lightweight-feel", "Functional"],
+        rationale: "Excellent chemical resistance with living-hinge capability. The semi-gloss mold finish provides a hygienic, easy-clean surface that meets food-contact regulations, making it the workhorse of kitchen and medical disposables.",
+        sources: ["4", "3", "5"],
+        processes: [
+            { name: "Injection Molding (VDI/MT Texture)", Ra_output: "0.4–12 µm (VDI grade)", gloss_output: "2–60 GU (grade dependent)", aestheticChar: "Isotropic matte to semi-gloss; texture transferred from precision-EDM'd mold", compatibility: "ABS, PC, PP, PA. Draft angle must increase with texture depth (min 1°/0.025mm).", setupCost: "High", unitCostRange: "$0.30–1.50/unit (amortized)", costTier: 2, source: "4, 5" },
+            { name: "In-Mold Labeling (IML)", Ra_output: "Label dependent", gloss_output: "Label dependent", aestheticChar: "Photorealistic graphics fused into part surface; zero label peel risk", compatibility: "PP and PE primarily. Label material must match resin for recyclability.", setupCost: "Medium", unitCostRange: "$0.05–0.30/label", costTier: 1, source: "5" }
+        ]
+    },
+
+    /* ─── 20  SILICONE RUBBER — OVERMOLDED ─── */
+    {
+        id: 20,
+        productLines: ["Wearables / Watches", "Medical Devices", "Kitchenware / Cutlery", "Sporting Goods"],
+        applications: ["Medical / Hygienic", "Casual / Home Use", "High-Performance / Engineered", "Outdoor / Harsh Environment"],
+        materialFamily: "Polymers",
+        materialName: "Liquid Silicone Rubber (LSR)",
+        grade: "Medical / Food Grade (Platinum Cured)",
+        surfaceCondition: "LSR Molded — SPI A-3 Semi-gloss",
+        Ra_min: 0.05, Ra_max: 0.3,
+        gloss_min: 40, gloss_max: 70,
+        finishCategory: "Satin/Semi-gloss",
+        perceptionTags: ["Soft-touch", "Clean", "Functional", "Durable", "Antimicrobial"],
+        rationale: "Biocompatible, hypoallergenic, and temperature-stable from −60°C to +230°C. The gentle elastomeric feel makes it ideal for wearable bands, baby products, and medical interfaces where skin contact comfort is paramount.",
+        sources: ["4", "3", "5"],
+        processes: [
+            { name: "Liquid Injection Molding (LIM)", Ra_output: "0.05–0.5 µm", gloss_output: "30–80 GU", aestheticChar: "Translucent to opaque; soft, skin-like tactile; parting line nearly invisible", compatibility: "LSR and HCR silicones only. Requires specialized LIM press with static mixer.", setupCost: "High", unitCostRange: "$0.50–3/unit (amortized)", costTier: 3, source: "4, 5" },
+            { name: "Overmolding (2K / Insert)", Ra_output: "Substrate + LSR zone", gloss_output: "Mixed", aestheticChar: "Combines rigid structure with soft-touch grip zones; dual-material aesthetics", compatibility: "LSR bonds to PC, PA, PBT with primer. Poor adhesion to PP, PE.", setupCost: "High", unitCostRange: "$1–5/unit", costTier: 3, source: "4, 5" }
+        ]
+    },
+
+    /* ─── 21  AL 7075-T6 — BRUSHED SATIN ─── */
+    {
+        id: 21,
+        productLines: ["Sporting Goods", "Automotive / Transport", "Wearables / Watches", "Industrial Tools"],
+        applications: ["High-Performance / Engineered", "Outdoor / Harsh Environment", "Luxury / Premium"],
+        materialFamily: "Metals",
+        materialName: "Aluminum Alloy (High-Strength)",
+        grade: "AA 7075-T6",
+        surfaceCondition: "Brushed Satin + Hard Anodize (Type III)",
+        Ra_min: 0.3, Ra_max: 0.8,
+        gloss_min: 15, gloss_max: 35,
+        finishCategory: "Brushed/Directional",
+        perceptionTags: ["Engineered", "Tough", "Directional", "High-tech", "Durable"],
+        rationale: "Tensile strength of 572 MPa — comparable to many steels at one-third the density. Brushed satin finish with Type III hard anodize (50+ µm) creates an extremely wear-resistant surface for cycling components, climbing gear, and tactical equipment.",
+        sources: ["1", "2", "4"],
+        processes: [
+            { name: "Abrasive Belt Brushing", Ra_output: "0.4–1.0 µm", gloss_output: "20–50 GU", aestheticChar: "Directional 'grain' lines; conceals wear patterns over time", compatibility: "Most metals. Difficult on complex 3D curves and deep channels.", setupCost: "Low", unitCostRange: "$1–4/unit", costTier: 1, source: "1, 5" },
+            { name: "Type III Hard Anodize", Ra_output: "Substrate + 0.2 µm", gloss_output: "5–15 GU", aestheticChar: "Dark grey/black, industrial, extremely hard (60+ HRC equivalent)", compatibility: "Only for aluminum alloys. Not recommended for 2xxx or 7xxx series with > 5% Cu.", setupCost: "High", unitCostRange: "$8–20/unit", costTier: 4, source: "1, 5" }
+        ]
+    }
+
+    ];
+
+    /* ================================================================
+       PERCEPTION TOOLTIP MAP
+       ================================================================ */
+    const PERC_TIPS = {
+        "Modern":           "Clean, minimal textures (bead blasting, anodize, powder coat) with neutral light scattering. Ra 0.4–2.0 µm range.",
+        "Technical":        "Precisely engineered finishes like PVD or EDM-textured molds showing intentional surface control.",
+        "Understated":      "Muted, matte finishes (10–25 GU) that don't compete for visual attention — per Karana et al. (2009).",
+        "Clean":            "Low-texture surfaces with consistent tone; conveys hygiene and order. Common in electronics and medical.",
+        "Premium":          "High gloss (> 60 GU) or precisely controlled textures with deep metallic luster. Ashby & Johnson (2014) Ch.7.",
+        "Pristine":         "Ultra-smooth mirror surfaces (Ra < 0.1 µm, > 85 GU) conveying perfection. ISO 4287 mirror-polished class.",
+        "Clinical":         "Driven by isotropic electropolished surface with Ra < 0.1 µm and 90+ GU. Zero crevice microbiology per ASM Vol.5.",
+        "Expensive":        "Material and process cost signals value: Ti, 316L SS, PVD, fine lapping all carry inherently high unit costs.",
+        "Professional":     "Brushed directional textures (Ra 0.4–0.8 µm) suggesting precision machining and quality control.",
+        "Directional":      "Unidirectional abrasive grain (No. 3, No. 4 finishes) creating visual flow along the surface.",
+        "Durable":          "Materials and coatings with high hardness (> 400 HV) or thick protective layers (> 25 µm).",
+        "Industrial-refined":"Industrial origins (steel, shot peen) refined through controlled finishing for designed products.",
+        "Warm":             "Warm-tone materials (wood, brass, copper) with tactile appeal. Karana et al. (2009) 'sensorial' axis.",
+        "Heritage":         "Aged or hand-worked surfaces with higher Ra (> 1.5 µm). Patina and imperfection signal authenticity.",
+        "Organic":          "Natural grain, knots, or fiber visible in the surface — unprocessed or minimally processed appearance.",
+        "Sustainable":      "Renewable source (bamboo, FSC wood) or low-energy process. Eco-label-eligible per ISO 14024.",
+        "Crafted":          "Visible hand-process marks (brush strokes, sanding scratches) suggesting artisanal production.",
+        "High-tech":        "PVD, CVD, or advanced coating processes conveying engineering precision. Thin-film interference colours.",
+        "Aggressive":       "Bold, hard-edged finishes (dark PVD, shot peen) suggesting performance and strength.",
+        "Gold-tone":        "TiN PVD coating range producing warm metallic gold hue (2–5 µm thickness). ASM Handbook Vol. 5.",
+        "Low-friction":     "Surface treatments (PVD TiN, DLC) achieving CoF < 0.15 — both functional and perceived as 'smooth'.",
+        "Transparent":      "Optical-grade clarity (> 88% transmission). PC, PMMA achieve Ra < 0.05 µm with SPI A-1 molds.",
+        "Futuristic":       "High-gloss, seamless surfaces evoking sci-fi product language. Often transparent or mirror-finish metals.",
+        "Lightweight-feel": "Material density < 2.0 g/cm³ or composite construction. Visual lightness through thin sections and cutouts.",
+        "Pure":             "Mono-material, uncontaminated appearance. Single colour, no visible joints or fasteners.",
+        "Structural":       "Visible load-bearing elements (weave, ribs, geometry) as aesthetic features.",
+        "Engineered":       "Surface finish is clearly the result of controlled process, not natural or accidental.",
+        "Robust":           "Thick-walled, textured surfaces (VDI 24+) that signal impact resistance and durability.",
+        "Soft-touch":       "Fine matte texture (Ra 1.6–3.2 µm) creating tactile comfort. Often elastomeric overmold or EDM texture.",
+        "Functional":       "Form follows function — texture, colour, and finish serve ergonomic or performance purposes.",
+        "Matte":            "Gloss < 10 GU. Scatters light diffusely, reducing glare and fingerprint visibility.",
+        "Rugged":           "Coarse, non-reflective textures (Ra > 2.0 µm) signaling heavy-duty durability. Shot peened or sandblasted.",
+        "Industrial":       "Raw or minimally finished surfaces — mill scale, weld beads, or casting texture left visible.",
+        "Tough":            "High fracture toughness materials (tool steels, Ti alloys) with finishes that signal impact resistance.",
+        "Neutral":          "Minimal colour saturation (greys, whites, blacks). Blends into any product environment.",
+        "Accessible":       "Low-cost materials and processes creating an approachable, non-intimidating product character.",
+        "Linear":           "Directional grain or fiber alignment creating visual flow. Bamboo and brushed metals.",
+        "Zen":              "Calm, minimal, natural-material aesthetic. Low gloss, warm tones, simple geometry. Karana et al. (2009).",
+        "Eco-modern":       "Sustainable materials (bamboo, recycled content) with contemporary, precision-finished appearance.",
+        "Aged":             "Patina, oxidation, or wear patterns that develop over time — designed impermanence.",
+        "Versatile":        "Finishes adaptable to wide colour, texture, and gloss ranges (e.g., powder coating, spray painting).",
+        "Colourful":        "Wide RAL / Pantone colour gamut available through the finishing process.",
+        "Antimicrobial":    "Inherent (Cu, Ag) or applied antimicrobial surface. EPA-registered for copper alloys.",
+        "Weatherproof":     "UV, moisture, and salt-spray resistant. Gel coat, marine-grade anodize, or PVDF coatings."
+    };
+
+
+    /* ================================================================
+       FILTER STATE + DOM REFS
+       ================================================================ */
+    const $ = s => document.querySelector(s);
+    const $$ = s => document.querySelectorAll(s);
+
+    const elProduct  = $('#f-product');
+    const elFinish   = $('#f-finish');
+    const elCtxChips = $$('#f-context .filter-chip');
+    const elFamBoxes = $$('#f-family input[type=checkbox]');
+    const elMatGrid  = $('#mat-grid');
+    const elProcGrid = $('#proc-grid');
+    const elPercCloud= $('#perc-cloud');
+    const elMatCount = $('#mat-count');
+
+
+    /* ================================================================
+       FILTERING ENGINE
+       ================================================================ */
+    function getFilters() {
+        const product  = elProduct.value;
+        const finish   = elFinish.value;
+        const contexts = [];
+        elCtxChips.forEach(c => { if (c.classList.contains('on')) contexts.push(c.dataset.v); });
+        const families = [];
+        elFamBoxes.forEach(b => { if (b.checked) families.push(b.value); });
+        return { product, finish, contexts, families };
+    }
+
+    function score(item, f) {
+        let s = 0;
+
+        /* Product match (required) */
+        if (!item.productLines.includes(f.product)) return -1;
+
+        /* Family match (required) */
+        if (!f.families.includes(item.materialFamily)) return -1;
+
+        /* Context match (if any selected, at least one must match) */
+        if (f.contexts.length > 0) {
+            const hits = item.applications.filter(a => f.contexts.includes(a)).length;
+            if (hits === 0) return -1;
+            s += hits * 20;
+        }
+
+        /* Finish preference (soft filter — boosts, doesn't eliminate) */
+        if (f.finish !== 'No preference') {
+            if (item.finishCategory === f.finish) {
+                s += 40;
+            } else {
+                /* secondary: check if specs partially overlap */
+                let partialMatch = false;
+                if (f.finish === 'Mirror/High-gloss')    partialMatch = item.gloss_max >= 80;
+                if (f.finish === 'Satin/Semi-gloss')     partialMatch = item.gloss_min >= 20 && item.gloss_max <= 80;
+                if (f.finish === 'Matte/Bead-blasted')   partialMatch = item.gloss_max <= 30 && item.Ra_min >= 0.6;
+                if (f.finish === 'Brushed/Directional')  partialMatch = item.surfaceCondition.toLowerCase().includes('brush');
+                if (f.finish === 'Industrial/As-built')  partialMatch = item.Ra_min >= 1.6;
+                if (partialMatch) s += 15;
+                else s -= 10;
+            }
+        }
+
+        /* Base suitability boost for variety */
+        s += 10;
+        return s;
+    }
+
+    function runFilter() {
+        const f = getFilters();
+        let results = DB.map(item => ({ ...item, _score: score(item, f) }))
+                        .filter(item => item._score >= 0)
+                        .sort((a, b) => b._score - a._score)
+                        .slice(0, 5);
+
+        renderPerceptions(results);
+        renderMaterials(results);
+        renderProcesses(results);
+    }
+
+
+    /* ================================================================
+       RENDERERS
+       ================================================================ */
+
+    /* ── SECTION C: Perceptions ── */
+    function renderPerceptions(items) {
+        const tags = [...new Set(items.flatMap(i => i.perceptionTags))];
+        if (!tags.length) {
+            elPercCloud.innerHTML = '<span style="color:var(--text-faint);font-size:.82rem">Adjust filters to see aesthetic descriptors.</span>';
+            return;
+        }
+        elPercCloud.innerHTML = tags.map(t => {
+            const tip = PERC_TIPS[t] || 'General perception descriptor — see Karana et al. (2009).';
+            return `<div class="ptag">${t}<div class="ptip">${tip}</div></div>`;
+        }).join('');
+    }
+
+    /* ── SECTION A: Materials ── */
+    function renderMaterials(items) {
+        elMatCount.textContent = items.length + (items.length === 1 ? ' result' : ' results');
+
+        /* Stats bar: count by family */
+        const statsBar = document.getElementById('stats-bar');
+        if (!items.length) {
+            statsBar.innerHTML = '';
+            elMatGrid.innerHTML = `<div class="empty-msg"><div class="empty-icon">⊘</div>No materials match the current filter combination.<br>Try broadening your selection.</div>`;
+            return;
+        }
+
+        /* Build family breakdown */
+        const famCount = {};
+        const famNames = { 'Metals': 'fam-metals', 'Polymers': 'fam-polymers', 'Natural Materials': 'fam-natural', 'Composites': 'fam-composites' };
+        items.forEach(it => { famCount[it.materialFamily] = (famCount[it.materialFamily] || 0) + 1; });
+        const totalInDB = DB.filter(d => d.productLines.includes(getFilters().product)).length;
+        let pills = Object.entries(famCount).map(([fam, n]) =>
+            `<span class="sb-pill ${famNames[fam] || ''}">${fam} <span class="sb-n">${n}</span></span>`
+        ).join('');
+        statsBar.innerHTML = `<span class="sb-label">Showing ${items.length} of ${totalInDB} materials in database:</span>${pills}`;
+
+        elMatGrid.innerHTML = items.map((item, i) => {
+            const rankClass = i === 0 ? 'rank-1' : i === 1 ? 'rank-2' : i === 2 ? 'rank-3' : 'rank-n';
+            const rankBg    = i === 0 ? 'r1' : i === 1 ? 'r2' : i === 2 ? 'r3' : 'rn';
+            const cites     = item.sources.map(s => `<span class="cite">[${s}]</span>`).join(' ');
+            const specCite  = '<span class="cite">[2]</span>';
+            const delay     = i * 60;
+
+            return `
+            <div class="mat-card ${rankClass} animate-in" style="animation-delay:${delay}ms">
+                <div class="mc-top">
+                    <div>
+                        <div class="mc-name">${item.materialName}</div>
+                        <div class="mc-grade">${item.grade}</div>
+                    </div>
+                    <div class="mc-rank ${rankBg}">${i + 1}</div>
+                </div>
+                <div class="mc-surface">${item.surfaceCondition}</div>
+                <div class="mc-specs">
+                    <div class="mc-spec">
+                        <div class="mc-spec-label">Surface Roughness (Ra)</div>
+                        <div class="mc-spec-val">${item.Ra_min}–${item.Ra_max} µm ${specCite}</div>
+                    </div>
+                    <div class="mc-spec">
+                        <div class="mc-spec-label">Specular Gloss (60°)</div>
+                        <div class="mc-spec-val">${item.gloss_min}–${item.gloss_max} GU ${specCite}</div>
+                    </div>
+                </div>
+                <p class="mc-rationale">${item.rationale}</p>
+                <div class="mc-tags">${item.perceptionTags.map(t => `<span class="mc-tag">${t}</span>`).join('')}</div>
+                <div class="mc-footer">Sources: ${cites}</div>
+            </div>`;
+        }).join('');
+    }
+
+    /* ── SECTION B: Processes ── */
+    function renderProcesses(items) {
+        /* Collect unique processes keyed by name */
+        const seen = new Map();
+        items.forEach(item => {
+            item.processes.forEach(p => {
+                if (!seen.has(p.name)) seen.set(p.name, p);
+            });
+        });
+
+        const procs = [...seen.values()];
+        if (!procs.length) {
+            elProcGrid.innerHTML = `<div class="empty-msg"><div class="empty-icon">⊘</div>No process data for current selection.</div>`;
+            return;
+        }
+
+        elProcGrid.innerHTML = procs.map((p, i) => {
+            const stars = '★'.repeat(p.costTier) + '☆'.repeat(5 - p.costTier);
+            const delay = i * 50;
+            return `
+            <div class="proc-card animate-in" style="animation-delay:${delay}ms">
+                <div>
+                    <div class="pc-name">${p.name}</div>
+                    <div class="pc-compat">${p.compatibility}</div>
+                </div>
+                <div>
+                    <div class="pc-label">Achievable Specs</div>
+                    <div class="pc-val">${p.Ra_output} / ${p.gloss_output} <span class="cite">[${p.source}]</span></div>
+                </div>
+                <div>
+                    <div class="pc-label">Aesthetic Character</div>
+                    <div class="pc-aesthetic">${p.aestheticChar}</div>
+                </div>
+                <div class="pc-cost">
+                    <div class="pc-stars">${stars}</div>
+                    <div class="pc-unit">${p.unitCostRange} <span class="cite">[${p.source}]</span></div>
+                    <div class="pc-setup">Setup: ${p.setupCost}</div>
+                </div>
+            </div>`;
+        }).join('');
+    }
+
+
+    /* ================================================================
+       EVENT BINDING
+       ================================================================ */
+    elProduct.addEventListener('change', runFilter);
+    elFinish.addEventListener('change', runFilter);
+
+    elCtxChips.forEach(chip => {
+        chip.addEventListener('click', () => {
+            chip.classList.toggle('on');
+            runFilter();
+        });
+    });
+
+    elFamBoxes.forEach(box => {
+        box.addEventListener('change', runFilter);
+    });
+
+    /* Initial render */
+    runFilter();
+
+    </script>
+</body>
+</html>
