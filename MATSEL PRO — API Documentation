@@ -1,0 +1,84 @@
+# MATSEL PRO — API Documentation
+
+MATSEL PRO uses a Flask backend to connect the frontend with the material database, recommendation logic, cost model, manufacturing information and AI services.
+
+## Architecture
+
+```text
+Frontend
+   ↓
+HTTP / JSON
+   ↓
+Flask Backend
+   ↓
+Processing & Recommendation Logic
+   ↓
+Database / AI Layer
+```
+
+## Core API Functions
+
+### Material Recommendation
+
+Accepts product and application requirements and returns ranked material candidates.
+
+Typical inputs include:
+
+```text
+Product Line
+Sub-category
+Application
+Target Budget
+Production Volume
+```
+
+Processing flow:
+
+```text
+User Input
+   ↓
+Application Context
+   ↓
+Dynamic Weights
+   ↓
+Database Filtering
+   ↓
+Multi-Criteria Scoring
+   ↓
+Ranked Materials
+```
+
+### Manufacturing Process
+
+Maps a selected material to compatible manufacturing processes and surface-finishing options.
+
+### Cost Estimation
+
+Calculates estimated unit cost based on:
+
+```text
+Material Cost
++
+Manufacturing Cost
++
+Surface Treatment
++
+Tooling
++
+Overhead
+```
+
+### Image Intelligence
+
+Accepts a product image and performs AI-based analysis to identify:
+
+* Product characteristics
+* Material family
+* Surface finish
+* Aesthetic intent
+* Visual properties
+* Engineering observations
+
+The resulting information is used for material and manufacturing recommendations.
+
+> Exact endpoint names, request schemas and response formats should be documented here according to the final backend implementation.
