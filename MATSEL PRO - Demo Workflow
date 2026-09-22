@@ -1,0 +1,61 @@
+Step 1 — Define Requirements
+The user provides:
+Product category
+Application
+Aesthetic intent
+Target budget
+Production volume
+Step 2 — Material Recommendation
+MATSEL PRO processes the inputs and dynamically assigns importance to different criteria.
+Application Requirements
+        ↓
+Dynamic Weighting
+        ↓
+Material Database Filtering
+        ↓
+Multi-Criteria Scoring
+        ↓
+Material Ranking
+The system returns suitable material candidates along with an AI-generated engineering explanation.
+Step 3 — Manufacturing
+The selected material is mapped to compatible manufacturing processes.
+The system considers:
+Process compatibility
+Surface roughness
+Gloss
+Dimensional capability
+Manufacturing cost
+Aesthetic outcome
+Step 4 — Cost Estimation
+The estimated unit cost considers:
+Material
++
+Manufacturing
++
+Surface Treatment
++
+Tooling
++
+Overhead
+Production volume is also considered to evaluate tooling amortisation.
+Step 5 — Image Intelligence
+The user can upload a product sketch or rendering.
+Product Image
+      ↓
+Vision Analysis
+      ↓
+Material Family
+      ↓
+Aesthetic Intent
+      ↓
+Database Mapping
+      ↓
+Material Recommendation
+Step 6 — AI-Assisted Decision
+The final output combines:
+Material suitability
+Aesthetic requirements
+Manufacturing feasibility
+Cost considerations
+Application requirements
+This provides the designer with an integrated engineering decision-support workflow.
